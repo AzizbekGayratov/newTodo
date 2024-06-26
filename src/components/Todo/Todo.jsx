@@ -1,7 +1,8 @@
 import React from "react";
 import Swal from "sweetalert2";
-import { useContext, useState, useRef } from "react";
+import { useContext, useState } from "react";
 import Context from "../../scripts/context";
+import toast, { Toaster } from "react-hot-toast";
 
 const Todo = () => {
   const [isEdit, setIsEdit] = useState(false);
@@ -14,8 +15,6 @@ const Todo = () => {
   const data = state.todos;
   const title = data.length;
 
-  const inputRef = useRef(null);
-
   const deleteItem = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -26,7 +25,7 @@ const Todo = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        toast.success("Deleted!");
         dispatch({ type: "REMOVE", payload: id });
       }
     });
@@ -35,7 +34,6 @@ const Todo = () => {
   const editItem = (id) => {
     setIsEditId(id);
     setIsEdit(!isEdit);
-    inputRef.current.focus();
   };
   const saveEdit = (id, text) => {
     setIsEdit(!isEdit);
@@ -48,10 +46,7 @@ const Todo = () => {
         confirmButtonText: "Yes, save changes!",
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire({
-            title: "Saved!",
-            icon: "success",
-          });
+          toast.success("Saved!");
           dispatch({ type: "EDIT", payload: { id, text } });
         }
       });
@@ -71,7 +66,6 @@ const Todo = () => {
               className="bg-primary rounded-[10px] flex py-[19px] px-[20px] justify-between items-center"
             >
               <input
-                ref={inputRef}
                 onChange={(e) => setNewText(e.target.value)}
                 className="bg-transparent border-none text-white outline-none placeholder:text-inputColor w-full"
                 type="text"
@@ -103,12 +97,24 @@ const Todo = () => {
               </p>
               <div className="flex items-center">
                 <button
-                  onClick={() =>
+                  onClick={() => {
+                    toast("Task completed!", {
+                      duration: 4000,
+                      position: "top-right",
+                      style: {
+                        background: "#333",
+                        color: "#fff",
+                      },
+                      icon: "👏",
+                      success: "Successfully loaded!",
+                      error: "Error occurred!",
+                      loading: "Loading...",
+                    });
                     dispatch({
                       type: "DONE",
                       payload: { id: todo.id, text: todo.text },
-                    })
-                  }
+                    });
+                  }}
                   className="w-[30px] h-[30px] bg-no-repeat bg-center bg-[url('/src/assets/check.svg')] mr-[10px]"
                 ></button>
                 <button

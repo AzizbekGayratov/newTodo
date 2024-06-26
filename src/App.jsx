@@ -4,6 +4,7 @@ import Context from "./scripts/context.js";
 import reducer from "./scripts/reducer.js";
 import { useReducer, useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
+import { Toaster } from "react-hot-toast";
 
 const initialState = JSON.parse(localStorage.getItem("todos_state")) || {
   todos: [],
@@ -38,6 +39,7 @@ const App = () => {
           <Done />
         </div>
       )}
+      <Toaster position="top-right" reverseOrder={false} />
     </Context.Provider>
   );
 };

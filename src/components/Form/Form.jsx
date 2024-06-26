@@ -1,16 +1,21 @@
 import React from "react";
 import { useContext, useState, useRef } from "react";
 import Context from "../../scripts/context";
+import toast, { Toaster } from "react-hot-toast";
 
 const Form = () => {
   const [text, setText] = useState("");
   const { dispatch } = useContext(Context);
   const inputRef = useRef(null);
 
+  const notify = () => toast.success("Task added successfully");
+
   const handleSubmit = () => {
     inputRef.current.value = "";
     inputRef.current.focus();
     dispatch({ type: "ADD", payload: text });
+
+    toast.success("Task added successfully");
   };
 
   return (
@@ -25,7 +30,9 @@ const Form = () => {
       />
       <button
         type="submit"
-        onClick={() => handleSubmit()}
+        onClick={() => {
+          handleSubmit(), notify;
+        }}
         className="bg-violetColor rounded-[10px] w-[40px] h-[40px] p-[8px] bg-no-repeat bg-center bg-[url('/src/assets/add.svg')] hover:bg-focusedColor transition-all duration-300"
       ></button>
     </div>
