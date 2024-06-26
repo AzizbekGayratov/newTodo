@@ -1,6 +1,6 @@
 import React from "react";
 import Swal from "sweetalert2";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import Context from "../../scripts/context";
 
 const Todo = () => {
@@ -13,6 +13,8 @@ const Todo = () => {
   const { state, dispatch } = useContext(Context);
   const data = state.todos;
   const title = data.length;
+
+  const inputRef = useRef(null);
 
   const deleteItem = (id) => {
     Swal.fire({
@@ -33,6 +35,7 @@ const Todo = () => {
   const editItem = (id) => {
     setIsEditId(id);
     setIsEdit(!isEdit);
+    inputRef.current.focus();
   };
   const saveEdit = (id, text) => {
     setIsEdit(!isEdit);
@@ -65,9 +68,10 @@ const Todo = () => {
           isEdit && todo.id === isEditId ? (
             <li
               key={todo.id}
-              className="bg-primary rounded-[10px] flex py-[16px] px-[20px] justify-between items-center"
+              className="bg-primary rounded-[10px] flex py-[19px] px-[20px] justify-between items-center"
             >
               <input
+                ref={inputRef}
                 onChange={(e) => setNewText(e.target.value)}
                 className="bg-transparent border-none text-white outline-none placeholder:text-inputColor w-full"
                 type="text"
